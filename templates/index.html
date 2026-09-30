@@ -1,143 +1,376 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-    <title>AI Object Detection System</title>
+    <meta charset="UTF-8">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Object Detection</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}?v=3"
+    >
 
 </head>
 
+
 <body>
 
-<header>
 
-    <h1>AI Object Detection System</h1>
+<header class="navbar">
 
-    <p>Real-Time Object Detection & Inspection</p>
+    <div class="brand">
 
-</header>
-
-
-<div class="container">
-
-    <!-- Webcam Detection -->
-
-    <h2>Live Camera Detection</h2>
-
-    <button onclick="startDetection()">
-        Start Detection
-    </button>
-
-    <button onclick="stopDetection()">
-        Stop Detection
-    </button>
-
-
-    <!-- Dashboard -->
-
-    <div class="dashboard">
-
-        <div class="card">
-
-            <h3>Total Objects</h3>
-
-            <p id="total">0</p>
-
+        <div class="brand-icon">
+            AI
         </div>
 
+        <div>
 
-        <div class="card">
+            <h2>
+                ObjectVision
+            </h2>
 
-            <h3>People</h3>
-
-            <p id="person">0</p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>Cars</h3>
-
-            <p id="car">0</p>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>Bottles</h3>
-
-            <p id="bottle">0</p>
+            <span>
+                AI Detection System
+            </span>
 
         </div>
 
     </div>
 
 
-    <!-- Camera -->
+    <div class="status">
 
-    <img id="video"
-         width="800"
-         style="max-width:100%; display:none;">
+        <span class="status-dot"></span>
 
+        System Ready
 
-    <hr>
+    </div>
 
-
-    <!-- Upload Image -->
-
-    <h2>Upload Image</h2>
-
-    <form action="/upload"
-          method="POST"
-          enctype="multipart/form-data">
-
-        <input
-            type="file"
-            name="file"
-            accept="image/*"
-            required>
-
-        <br><br>
-
-        <button type="submit">
-            Detect Objects
-        </button>
-
-    </form>
+</header>
 
 
-    <!-- Detection Message -->
 
-    {% if message %}
-
-        <h3>{{ message }}</h3>
-
-    {% endif %}
+<main class="container">
 
 
-    <!-- Detection Result -->
+    <!-- HERO -->
 
-    {% if result_image %}
+    <section class="hero">
 
-        <h2>Detection Result</h2>
-
-        <img
-            src="{{ result_image }}"
-            width="800"
-            style="max-width:100%;">
-
-    {% endif %}
-
-</div>
+        <div class="badge">
+            ⚡ POWERED BY YOLO
+        </div>
 
 
-<script src="{{ url_for('static', filename='script.js') }}">
-</script>
+        <h1>
+
+            Intelligent Object
+
+            <span>
+                Detection
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Upload an image and let artificial intelligence
+            identify objects automatically with fast and
+            accurate computer vision.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- UPLOAD -->
+
+    <section class="upload-card">
+
+
+        <div
+            class="upload-area"
+            id="uploadArea"
+        >
+
+            <div class="upload-icon">
+                ↑
+            </div>
+
+
+            <h3>
+                Upload an image
+            </h3>
+
+
+            <p>
+                Drag & drop your image here or choose a file
+            </p>
+
+
+            <label
+                for="fileInput"
+                class="choose-btn"
+            >
+
+                Choose Image
+
+            </label>
+
+
+            <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                hidden
+            >
+
+
+            <p class="file-info">
+
+                Supported:
+                JPG, JPEG, PNG, WEBP
+
+            </p>
+
+        </div>
+
+
+
+        <!-- PREVIEW -->
+
+        <div
+            id="previewSection"
+            class="preview-section hidden"
+        >
+
+            <div class="preview-header">
+
+                <h3>
+                    Selected Image
+                </h3>
+
+
+                <button
+                    id="removeBtn"
+                    class="remove-btn"
+                >
+
+                    Remove
+
+                </button>
+
+            </div>
+
+
+            <img
+                id="previewImage"
+                src=""
+                alt="Selected image"
+            >
+
+
+            <button
+                id="detectBtn"
+                class="detect-btn"
+            >
+
+                <span>
+                    Detect Objects
+                </span>
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- RESULTS -->
+
+    <section
+        id="resultSection"
+        class="result-section hidden"
+    >
+
+
+        <div class="section-title">
+
+            <div>
+
+                <span class="small-label">
+                    ANALYSIS COMPLETE
+                </span>
+
+
+                <h2>
+                    Detection Results
+                </h2>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="result-grid">
+
+
+            <!-- RESULT IMAGE -->
+
+            <div class="result-image-card">
+
+                <img
+                    id="resultImage"
+                    src=""
+                    alt="Detection result"
+                >
+
+            </div>
+
+
+
+            <!-- OBJECTS -->
+
+            <div class="stats-card">
+
+                <h3>
+                    Detected Objects
+                </h3>
+
+
+                <div
+                    id="objectList"
+                    class="object-list"
+                >
+
+                </div>
+
+
+                <div class="total-box">
+
+                    <span>
+                        Total Objects
+                    </span>
+
+
+                    <strong id="totalObjects">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- FEATURES -->
+
+    <section class="features">
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ⚡
+            </div>
+
+            <h3>
+                Fast Detection
+            </h3>
+
+            <p>
+                AI-powered object detection
+                with quick image processing.
+            </p>
+
+        </div>
+
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🎯
+            </div>
+
+            <h3>
+                Accurate Results
+            </h3>
+
+            <p>
+                Detect multiple objects
+                in a single image.
+            </p>
+
+        </div>
+
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🔒
+            </div>
+
+            <h3>
+                Simple & Secure
+            </h3>
+
+            <p>
+                Upload an image and
+                get your results instantly.
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+
+        AI Object Detection System
+
+        <span>•</span>
+
+        Built with Python, Flask & YOLO
+
+    </p>
+
+</footer>
+
+
+
+<script
+    src="{{ url_for('static', filename='script.js') }}?v=3"
+></script>
+
 
 </body>
 
